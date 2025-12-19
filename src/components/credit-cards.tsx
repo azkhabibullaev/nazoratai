@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import useEmblaCarousel from "embla-carousel-react";
 
 export type CreditCardDTO = {
