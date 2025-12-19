@@ -56,21 +56,17 @@ export function CreditCardsCarousel({ cards }: { cards: CreditCardDTO[]; title?:
     }, [emblaApi, onSelect]);
 
     return (
-        <Card className="bg-background">
-            <CardContent className="space-y-4">
-                <div ref={emblaRef} className="overflow-hidden">
-                    <div className="flex gap-4">
-                        {cards.map((c) => (
-                            <div
-                                key={c.id}
-                                className="min-w-0 flex-[0_0_88%] sm:flex-[0_0_70%] lg:flex-[0_0_46%] xl:flex-[0_0_36%]"
-                            >
-                                <CreditCardVisual data={c} />
-                            </div>
-                        ))}
+        <div ref={emblaRef} className="overflow-hidden">
+            <div className="flex gap-4">
+                {cards.map((c) => (
+                    <div
+                        key={c.id}
+                        className="min-w-0 flex-[0_0_88%] sm:flex-[0_0_70%] lg:flex-[0_0_46%] xl:flex-[0_0_36%]"
+                    >
+                        <CreditCardVisual data={c} />
                     </div>
-                </div>
-            </CardContent>
-        </Card>
+                ))}
+            </div>
+        </div>
     );
 }
