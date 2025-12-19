@@ -1,6 +1,8 @@
 import React from "react";
 import { BottomNavigation } from "./components/bottom-nav";
 import { CreditCardsCarousel, type CreditCardDTO } from "./components/credit-cards";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 
 type CreditCardsResponse = {
     creditCards: CreditCardDTO[];
@@ -88,6 +90,21 @@ export function App() {
                     <div className="rounded-2xl border border-destructive/40 p-6 text-destructive">{error}</div>
                 )}
                 {!loading && !error && <CreditCardsCarousel cards={cards} />}
+            </div>
+            <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex-1 flex flex-col items-center justify-center border rounded-xl p-4 text-green-500">
+                    <HugeiconsIcon icon={ChartUpIcon} />
+                    <span>+100,000</span>
+                </div>
+                <div className="flex-1 flex flex-col items-center justify-center border rounded-xl p-4 text-red-500">
+                    <HugeiconsIcon icon={ChartDownIcon} />
+                    <span>-50,000</span>
+                </div>
+            </div>
+            <div className="flex items-center gap-2">
+                <div className="flex-1 p-2 border rounded-xl text-center">Kunlik</div>
+                <div className="flex-1 p-2 border rounded-xl text-center">Haftalik</div>
+                <div className="flex-1 p-2 border rounded-xl text-center">Oylik</div>
             </div>
             <BottomNavigation />
         </div>
