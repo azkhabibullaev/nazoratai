@@ -10,7 +10,7 @@ export function ClientCards({ cardType }: ClientCardsProps) {
 
     return (
         <div>
-            <div className="relative flex flex-col h-40 text-white rounded-2xl cursor-pointer bg-[url(src/assets/card-background.jpeg)] bg-cover bg-top-left bg-no-repeat overflow-hidden">
+            <div className="relative flex flex-col h-40 text-white rounded-2xl cursor-pointer bg-[url(/card-background.jpeg)] bg-cover bg-top-left bg-no-repeat overflow-hidden">
                 <div
                     style={{ background: cardColors[cardType] }}
                     className="flex flex-col justify-center h-3/5 pt-2.5 px-3 pb-1.5 bg-[radial-gradient(circle,rgba(255,255,255,0.15),transparent,60%)] from-gray-100 to-slate-800 opacity-80"
