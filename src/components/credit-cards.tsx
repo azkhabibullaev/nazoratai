@@ -1,37 +1,9 @@
 import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { ClientCards } from "./client-cards/client-cards";
+import type { CreditCardDTO } from "@/routes";
 
-export type CreditCardDTO = {
-    id: string;
-    holderName: string;
-    numberMasked: string;
-    expiry: string;
-    brand?: "POCKET" | "UZCARD" | "HUMO" | "VISA" | "MASTERCARD" | string;
-};
-
-function BrandText({ brand }: { brand?: string }) {
-    return <div className="text-lg font-semibold tracking-wide">{brand ?? "VISA"}</div>;
-}
-
-function CreditCardVisual({ data }: { data: CreditCardDTO; className?: string }) {
-    const number = <div className="text-lg md:text-xl">{data.numberMasked}</div>;
-    return (
-        <div className="border rounded-lg p-4">
-            <div className="flex items-start justify-between">
-                <BrandText brand={data.brand} />
-            </div>
-            <div className="mt-10">{number}</div>
-            <div className="mt-8 flex items-end justify-between">
-                <div className="space-y-1">
-                    <div className="text-sm">{data.holderName}</div>
-                    <div className="text-sm opacity-95">{data.expiry}</div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-export function CreditCardsCarousel({ cards }: { cards: CreditCardDTO[]; title?: string }) {
+export function CreditCardsCarousel({ cards }: { cards: CreditCardDTO[] }) {
     const [emblaRef, emblaApi] = useEmblaCarousel({
         align: "start",
         loop: false,
@@ -60,9 +32,9 @@ export function CreditCardsCarousel({ cards }: { cards: CreditCardDTO[]; title?:
                 {cards.map((c) => (
                     <div
                         key={c.id}
-                        className="min-w-0 flex-[0_0_88%] sm:flex-[0_0_70%] lg:flex-[0_0_46%] xl:flex-[0_0_36%]"
+                        className="min-w-0 flex-[0_0_75%] sm:flex-[0_0_75%] lg:flex-[0_0_65%] xl:flex-[0_0_55%]"
                     >
-                        <CreditCardVisual data={c} />
+                        <ClientCards cardType={c.cardType} />
                     </div>
                 ))}
             </div>
