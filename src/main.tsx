@@ -1,5 +1,6 @@
 import "./index.css";
 
+import eruda from "eruda";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -25,10 +26,8 @@ console.log("href:", window.location.href);
 console.log("hash:", window.location.hash);
 console.log("isTMA(simple):", isTMA());
 try {
-    const lp = retrieveLaunchParams();
-    console.log("launchParams:", lp);
-    const initDataPreview = typeof lp.initDataRaw === "string" ? lp.initDataRaw.slice(0, 40) : undefined;
-    console.log("initDataRaw starts:", initDataPreview);
+    const { initDataRaw } = retrieveLaunchParams();
+    console.log("initDataRaw starts:", initDataRaw);
 } catch (e) {
     console.error("retrieveLaunchParams error:", e);
 }
