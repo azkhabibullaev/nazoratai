@@ -1,6 +1,5 @@
 import "./index.css";
 
-import eruda from "eruda";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
