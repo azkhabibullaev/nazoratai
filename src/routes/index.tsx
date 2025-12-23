@@ -7,6 +7,7 @@ import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useQuery } from "@tanstack/react-query";
 import { getInitDataHash, getInitDataRaw } from "@/lib/telegram";
 import { api } from "@/api/base";
+import { isTMA } from "@tma.js/bridge";
 
 export const Route = createFileRoute("/")({
     component: RouteComponent,
@@ -58,21 +59,19 @@ const cards: CreditCardDTO[] = [
     },
 ];
 
-async function verify(initDataRaw: string) {
-    const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f", {
-        headers: {
-            Authorization: `tma ${initDataRaw}`,
-        },
-    });
+async function verify() {
+    const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f");
     return response.data;
 }
 
 function RouteComponent() {
     const initDataRaw = getInitDataRaw();
+    console.log("initDataRaw:", initDataRaw?.slice(0, 30));
+    console.log("isTMA:", isTMA());
     const key = initDataRaw ? getInitDataHash(initDataRaw) : "no-init-data";
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["tg-verify", key],
-        queryFn: () => verify(initDataRaw!),
+        queryFn: () => verify(),
         enabled: Boolean(initDataRaw),
         staleTime: Infinity,
         retry: false,
