@@ -1,14 +1,17 @@
 import { retrieveLaunchParams } from "@tma.js/sdk";
 import { isTMA } from "@tma.js/bridge";
 
-let cached: string | undefined = undefined;
+let cachedInitDataRaw: string | undefined;
 
 export function getInitDataRaw(): string | undefined {
-    if (cached) return cached;
+    if (cachedInitDataRaw) return cachedInitDataRaw;
     if (!isTMA()) return undefined;
     const { initDataRaw } = retrieveLaunchParams();
-    if (initDataRaw) cached = initDataRaw;
-    return initDataRaw;
+    if (typeof initDataRaw === "string" && initDataRaw.length > 0) {
+        cachedInitDataRaw = initDataRaw;
+        return initDataRaw;
+    }
+    return undefined;
 }
 
 // queryKey uzun bo‘lib ketmasin desangiz, initDataRaw ichidan "hash"ni ajratib oling
