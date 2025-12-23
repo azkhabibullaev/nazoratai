@@ -8,10 +8,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
-import { getWebApp } from "@/lib/getWebApp";
 import { isTMA } from "@tma.js/bridge";
 import { retrieveLaunchParams } from "@tma.js/sdk";
-const webApp = getWebApp();
 
 type TelegramWindow = Window & {
     Telegram?: {
@@ -51,12 +49,6 @@ declare module "@tanstack/react-router" {
     interface Register {
         router: typeof router;
     }
-}
-
-// Launch eruda and enable SDK debug mode, if debug mode was requested outside.
-const debug = webApp.initDataUnsafe.start_param === "debug";
-if (debug) {
-    import("eruda").then((lib) => lib.default.init());
 }
 
 const rootElement = document.getElementById("root") as HTMLElement;
