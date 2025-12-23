@@ -59,9 +59,7 @@ const cards: CreditCardDTO[] = [
 ];
 
 async function verify() {
-    console.log("[verify] started", new Date().toISOString());
     const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f");
-    console.log("[verify] done", response.status);
     return response.data;
 }
 
@@ -73,7 +71,17 @@ function RouteComponent() {
         queryFn: () => verify(),
     });
     if (!initDataRaw) {
-        return <div style={{ padding: 16 }}>Telegram ichida oching (initData yo‘q).</div>;
+        return (
+            <div style={{ padding: 16 }}>
+                Telegram ichida oching (initData yo‘q).
+                <pre>init data raw: {JSON.stringify(initDataRaw)}</pre>
+                <pre>key: {JSON.stringify(key)}</pre>
+                <pre>data: {JSON.stringify(data)}</pre>
+                <pre>is error: {JSON.stringify(isError)}</pre>
+                <pre>error: {JSON.stringify(error)}</pre>
+                <pre>is loading: {JSON.stringify(isLoading)}</pre>
+            </div>
+        );
     }
     if (isLoading) return <div style={{ padding: 16 }}>Tekshirilmoqda...</div>;
     if (isError) {

@@ -14,7 +14,6 @@ export function getInitDataRaw(): string | undefined {
     return undefined;
 }
 
-// queryKey uzun bo‘lib ketmasin desangiz, initDataRaw ichidan "hash"ni ajratib oling
 export function getInitDataHash(initDataRaw: string): string {
     const p = new URLSearchParams(initDataRaw);
     return p.get("hash") || "no-hash";

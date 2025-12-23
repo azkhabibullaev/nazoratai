@@ -7,7 +7,7 @@ export const api = axios.create({
 
 api.interceptors.request.use((config) => {
     const initDataRaw = getInitDataRaw();
-    console.log("initDataRaw in interceptor:", initDataRaw?.slice(0, 30));
+    alert(`[api] request, ${config.url}, "auth:", ${config.headers?.Authorization}`);
     if (!initDataRaw) return config;
     if (config.headers && "set" in config.headers && typeof config.headers.set === "function") {
         config.headers.set("Authorization", `tma ${initDataRaw}`);
