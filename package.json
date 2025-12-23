@@ -21,6 +21,7 @@
     "@tanstack/react-router-devtools": "^1.142.8",
     "@tanstack/react-store": "^0.8.0",
     "@telegram-apps/sdk": "^3.11.8",
+    "@telegram-apps/telegram-ui": "^2.1.13",
     "@tma.js/sdk-react": "^3.0.11",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
