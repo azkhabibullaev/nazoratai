@@ -12,18 +12,30 @@ import { getWebApp } from "@/lib/getWebApp";
 import { isTMA } from "@tma.js/bridge";
 import { retrieveLaunchParams } from "@tma.js/sdk";
 const webApp = getWebApp();
+
+type TelegramWindow = Window & {
+    Telegram?: {
+        WebApp?: {
+            initData?: string;
+            initDataRaw?: string;
+            start_param?: string;
+        };
+    };
+};
+
 console.log("href:", window.location.href);
 console.log("hash:", window.location.hash);
 console.log("isTMA(simple):", isTMA());
 try {
     const lp = retrieveLaunchParams();
     console.log("launchParams:", lp);
-    console.log("initDataRaw starts:", lp.initDataRaw?.slice(0, 40));
+    const initDataPreview = typeof lp.initDataRaw === "string" ? lp.initDataRaw.slice(0, 40) : undefined;
+    console.log("initDataRaw starts:", initDataPreview);
 } catch (e) {
     console.error("retrieveLaunchParams error:", e);
 }
-console.log("window.Telegram?.WebApp:", (window as any).Telegram?.WebApp);
-console.log("WebApp.initData:", (window as any).Telegram?.WebApp?.initData?.slice?.(0, 40));
+console.log("window.Telegram?.WebApp:", (window as TelegramWindow).Telegram?.WebApp);
+console.log("WebApp.initData:", (window as TelegramWindow).Telegram?.WebApp?.initData?.slice?.(0, 40));
 
 const queryClient = new QueryClient({
     defaultOptions: {
