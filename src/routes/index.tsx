@@ -59,12 +59,7 @@ const cards: CreditCardDTO[] = [
 ];
 
 async function verify() {
-    const initDataRaw = retrieveRawInitData();
-    const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f", {
-        headers: {
-            Authorization: `tma ${initDataRaw}`,
-        },
-    });
+    const response = await api.get("/users/getMe");
     return response.data;
 }
 
