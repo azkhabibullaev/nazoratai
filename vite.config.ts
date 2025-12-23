@@ -4,8 +4,6 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
-const TARGET = "https://api.webhook.nazorat-ai.uz";
-
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
@@ -24,7 +22,7 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: TARGET,
+                target: "https://api.webhook.nazorat-ai.uz",
                 changeOrigin: true,
                 secure: false,
             },

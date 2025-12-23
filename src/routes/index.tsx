@@ -59,7 +59,9 @@ const cards: CreditCardDTO[] = [
 ];
 
 async function verify() {
+    console.log("[verify] started", new Date().toISOString());
     const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f");
+    console.log("[verify] done", response.status);
     return response.data;
 }
 
@@ -69,9 +71,6 @@ function RouteComponent() {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["tg-verify", key],
         queryFn: () => verify(),
-        enabled: Boolean(initDataRaw),
-        staleTime: Infinity,
-        retry: false,
     });
     if (!initDataRaw) {
         return <div style={{ padding: 16 }}>Telegram ichida oching (initData yo‘q).</div>;
