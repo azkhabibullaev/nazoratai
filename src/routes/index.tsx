@@ -5,8 +5,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useQuery } from "@tanstack/react-query";
-import { getInitDataHash, getInitDataRaw } from "@/lib/telegram";
 import { api } from "@/api/base";
+import { retrieveRawInitData } from "@tma.js/sdk";
 
 export const Route = createFileRoute("/")({
     component: RouteComponent,
@@ -59,15 +59,19 @@ const cards: CreditCardDTO[] = [
 ];
 
 async function verify() {
-    const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f");
+    const initDataRaw = retrieveRawInitData();
+    const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f", {
+        headers: {
+            Authorization: `tma ${initDataRaw}`,
+        },
+    });
     return response.data;
 }
 
 function RouteComponent() {
-    const initDataRaw = getInitDataRaw();
-    const key = initDataRaw ? getInitDataHash(initDataRaw) : "no-init-data";
+    const initDataRaw = retrieveRawInitData();
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ["tg-verify", key],
+        queryKey: ["tg-verify"],
         queryFn: () => verify(),
     });
     if (!initDataRaw) {
@@ -75,7 +79,6 @@ function RouteComponent() {
             <div style={{ padding: 16 }}>
                 Telegram ichida oching (initData yo‘q).
                 <pre>init data raw: {JSON.stringify(initDataRaw)}</pre>
-                <pre>key: {JSON.stringify(key)}</pre>
                 <pre>data: {JSON.stringify(data)}</pre>
                 <pre>is error: {JSON.stringify(isError)}</pre>
                 <pre>error: {JSON.stringify(error)}</pre>
