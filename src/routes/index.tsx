@@ -5,7 +5,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useQuery } from "@tanstack/react-query";
-import { getInitDataRaw } from "@/lib/telegram";
+import { getInitDataHash, getInitDataRaw } from "@/lib/telegram";
 import { api } from "@/api/base";
 
 export const Route = createFileRoute("/")({
@@ -59,7 +59,7 @@ const cards: CreditCardDTO[] = [
 ];
 
 async function verify(initDataRaw: string) {
-    const response = await api.post("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f", {
+    const response = await api.get("/users/getMe/593aa48d-d82d-46ec-a0e0-67e43a2cbe5f", {
         headers: {
             Authorization: `tma ${initDataRaw}`,
         },
@@ -69,8 +69,9 @@ async function verify(initDataRaw: string) {
 
 function RouteComponent() {
     const initDataRaw = getInitDataRaw();
+    const key = initDataRaw ? getInitDataHash(initDataRaw) : "no-init-data";
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ["tg-verify", initDataRaw ? "has-init-data" : "no-init-data"],
+        queryKey: ["tg-verify", key],
         queryFn: () => verify(initDataRaw!),
         enabled: Boolean(initDataRaw),
         staleTime: Infinity,
@@ -82,9 +83,6 @@ function RouteComponent() {
     if (isLoading) return <div style={{ padding: 16 }}>Tekshirilmoqda...</div>;
     if (isError) {
         return <div style={{ padding: 16 }}>Verify xato: {(error as Error).message}</div>;
-    }
-    if (!data?.ok) {
-        return <div style={{ padding: 16 }}>Telegram verify muvaffaqiyatsiz.</div>;
     }
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
