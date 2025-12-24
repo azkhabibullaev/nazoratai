@@ -75,7 +75,7 @@ function RouteComponent() {
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
             <div className="p-2">
-                <div className="text-xl font-medium">Azamat</div>
+                <div className="text-xl font-medium">{data?.data?.fullName}</div>
             </div>
             <div className="mb-2">
                 <CreditCardsCarousel cards={cards} />
