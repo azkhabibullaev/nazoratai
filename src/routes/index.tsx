@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { BottomNavigation } from "@/components/bottom-nav";
 import { CreditCardsCarousel } from "@/components/credit-cards";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -9,10 +9,12 @@ import { api } from "@/api/base";
 import { retrieveRawInitData } from "@tma.js/sdk";
 
 export const Route = createFileRoute("/")({
+    validateSearch: (search: Record<string, unknown>) => {
+        return {
+            token: typeof search.token === "string" ? search.token : "",
+        };
+    },
     component: RouteComponent,
-    validateSearch: (search: Record<string, unknown>) => ({
-        token: search.token ? String(search.token) : undefined,
-    }),
 });
 
 export type CreditCardDTO = {
@@ -65,9 +67,10 @@ function RouteComponent() {
     const { token } = Route.useSearch();
     const initDataRaw = retrieveRawInitData();
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ["tg-verify"],
+        queryKey: ["tg-verify", token],
+        enabled: Boolean(initDataRaw && token),
         queryFn: async () => {
-            const response = await api.get(`/users/getMe/${token}}`);
+            const response = await api.get(`/users/getMe/${token}`);
             return response.data;
         },
     });
