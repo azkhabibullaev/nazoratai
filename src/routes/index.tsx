@@ -1,4 +1,4 @@
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { BottomNavigation } from "@/components/bottom-nav";
 import { CreditCardsCarousel } from "@/components/credit-cards";
 import { HugeiconsIcon } from "@hugeicons/react";
