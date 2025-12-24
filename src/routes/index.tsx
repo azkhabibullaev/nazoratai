@@ -11,7 +11,7 @@ import { retrieveRawInitData } from "@tma.js/sdk";
 export const Route = createFileRoute("/")({
     component: RouteComponent,
     validateSearch: (search: Record<string, unknown>) => ({
-        id: search.id ? String(search.id) : undefined,
+        token: search.token ? String(search.token) : undefined,
     }),
 });
 
@@ -62,12 +62,12 @@ const cards: CreditCardDTO[] = [
 ];
 
 function RouteComponent() {
-    const { id } = Route.useSearch();
+    const { token } = Route.useSearch();
     const initDataRaw = retrieveRawInitData();
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["tg-verify"],
         queryFn: async () => {
-            const response = await api.get(`/users/getMe/${id}}`);
+            const response = await api.get(`/users/getMe/${token}}`);
             return response.data;
         },
     });
@@ -80,7 +80,7 @@ function RouteComponent() {
                 <pre>is error: {JSON.stringify(isError)}</pre>
                 <pre>error: {JSON.stringify(error)}</pre>
                 <pre>is loading: {JSON.stringify(isLoading)}</pre>
-                <pre>id: {id}</pre>
+                <pre>id: {token}</pre>
             </div>
         );
     }
