@@ -80,6 +80,7 @@ function RouteComponent() {
                 <pre>is error: {JSON.stringify(isError)}</pre>
                 <pre>error: {JSON.stringify(error)}</pre>
                 <pre>is loading: {JSON.stringify(isLoading)}</pre>
+                <pre>id: {id}</pre>
             </div>
         );
     }
