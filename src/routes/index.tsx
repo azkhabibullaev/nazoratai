@@ -10,6 +10,9 @@ import { retrieveRawInitData } from "@tma.js/sdk";
 
 export const Route = createFileRoute("/")({
     component: RouteComponent,
+    validateSearch: (search: Record<string, unknown>) => ({
+        id: search.id ? String(search.id) : undefined,
+    }),
 });
 
 export type CreditCardDTO = {
@@ -58,16 +61,15 @@ const cards: CreditCardDTO[] = [
     },
 ];
 
-async function verify() {
-    const response = await api.get("/users/getMe");
-    return response.data;
-}
-
 function RouteComponent() {
+    const { id } = Route.useSearch();
     const initDataRaw = retrieveRawInitData();
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["tg-verify"],
-        queryFn: () => verify(),
+        queryFn: async () => {
+            const response = await api.get(`/users/getMe/${id}}`);
+            return response.data;
+        },
     });
     if (!initDataRaw) {
         return (
