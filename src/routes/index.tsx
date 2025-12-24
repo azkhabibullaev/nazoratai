@@ -6,7 +6,6 @@ import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/base";
-import { retrieveRawInitData } from "@tma.js/sdk";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -65,32 +64,14 @@ const cards: CreditCardDTO[] = [
 
 function RouteComponent() {
     const { token } = Route.useSearch();
-    const initDataRaw = retrieveRawInitData();
-    const { data, isLoading, isError, error } = useQuery({
+    const { data } = useQuery({
         queryKey: ["tg-verify", token],
-        enabled: Boolean(initDataRaw && token),
+        enabled: Boolean(token),
         queryFn: async () => {
             const response = await api.get(`/users/getMe/${token}`);
             return response.data;
         },
     });
-    if (!initDataRaw) {
-        return (
-            <div style={{ padding: 16 }}>
-                Telegram ichida oching (initData yo‘q).
-                <pre>init data raw: {JSON.stringify(initDataRaw)}</pre>
-                <pre>data: {JSON.stringify(data)}</pre>
-                <pre>is error: {JSON.stringify(isError)}</pre>
-                <pre>error: {JSON.stringify(error)}</pre>
-                <pre>is loading: {JSON.stringify(isLoading)}</pre>
-                <pre>{token ?? "token yo'q"}</pre>
-            </div>
-        );
-    }
-    if (isLoading) return <div style={{ padding: 16 }}>Tekshirilmoqda...</div>;
-    if (isError) {
-        return <div style={{ padding: 16 }}>Verify xato: {(error as Error).message}</div>;
-    }
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
             <div style={{ padding: 16 }}>
