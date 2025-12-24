@@ -74,10 +74,6 @@ function RouteComponent() {
     });
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
-            <div style={{ padding: 16 }}>
-                <div>✅ Verified</div>
-                <pre>{JSON.stringify(data, null, 2)}</pre>
-            </div>
             <div className="p-2">
                 <div className="text-xl font-medium">Azamat</div>
             </div>
