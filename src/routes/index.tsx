@@ -6,7 +6,6 @@ import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/base";
-import axios from "axios";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -69,7 +68,7 @@ function RouteComponent() {
         queryKey: ["tg-verify", token],
         enabled: Boolean(token),
         queryFn: async () => {
-            const response = await axios.get(`/users/getToken/${token}`);
+            const response = await api.get(`/users/getToken/${token}`);
             console.log("verify response", response);
             return response.data;
         },
