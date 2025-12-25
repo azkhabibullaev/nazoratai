@@ -7,7 +7,7 @@ export function Reports() {
     const reports = useQuery({
         queryKey: ["reports"],
         queryFn: async () => {
-            const response = await api.get("/transaction/getReports");
+            const response = await api.get("/v1/transaction/getReports");
             return response.data;
         },
     });
