@@ -6,6 +6,7 @@ import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/base";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -64,6 +65,7 @@ const cards: CreditCardDTO[] = [
 
 function RouteComponent() {
     const { token } = Route.useSearch();
+
     const { data } = useQuery({
         queryKey: ["tg-verify", token],
         enabled: Boolean(token),
@@ -73,8 +75,13 @@ function RouteComponent() {
             return response.data;
         },
     });
-    const accessToken = data?.data?.accessToken;
-    localStorage.setItem("accessToken", accessToken ?? "");
+
+    const accessToken: string | undefined = data?.data?.accessToken;
+    useEffect(() => {
+        if (!accessToken) return;
+        localStorage.setItem("accessToken", accessToken);
+    }, [accessToken]);
+
     const telegramUser = useQuery({
         queryKey: ["tg-user", accessToken],
         enabled: Boolean(accessToken),
@@ -84,9 +91,10 @@ function RouteComponent() {
             return response.data;
         },
     });
+
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
-            <div className="py-4">
+            <div className="pt-12 pb-4">
                 <div>{telegramUser.data?.data?.fullName}</div>
             </div>
             <div className="mb-2">
