@@ -4,9 +4,9 @@ import { CreditCardsCarousel } from "@/components/credit-cards";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/base";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -67,38 +67,38 @@ function RouteComponent() {
     const { token } = Route.useSearch();
     const navigate = Route.useNavigate();
 
-    const [accessToken, setAccessToken] = useState<string>(() => localStorage.getItem("accessToken") ?? "");
+    const storedAccessToken = useMemo(() => {
+        return localStorage.getItem("accessToken") ?? "";
+    }, []);
 
-    const exchangeToken = useMutation({
-        mutationFn: async (t: string) => {
-            const response = await api.get(`/users/getToken/${t}`);
-            return response.data;
-        },
-        onSuccess: (data) => {
-            const at = data?.data?.accessToken as string | undefined;
-            if (!at) return;
-
-            localStorage.setItem("accessToken", at);
-            setAccessToken(at);
-
-            navigate({
-                replace: true,
-                search: (prev) => ({ ...prev, token: "" }),
-            });
-        },
-        onError: () => {
-            navigate({
-                replace: true,
-                search: (prev) => ({ ...prev, token: "" }),
-            });
+    const verify = useQuery({
+        queryKey: ["tg-verify", token],
+        enabled: Boolean(token) && !storedAccessToken,
+        queryFn: async () => {
+            const res = await api.get(`/users/getToken/${token}`);
+            return res.data;
         },
     });
 
+    const accessToken: string = verify.data?.data?.accessToken ?? storedAccessToken;
+
     useEffect(() => {
-        if (token && !accessToken && exchangeToken.status === "idle") {
-            exchangeToken.mutate(token);
-        }
-    }, [token, accessToken, exchangeToken]);
+        const at = verify.data?.data?.accessToken as string | undefined;
+        if (!at) return;
+        localStorage.setItem("accessToken", at);
+        navigate({
+            replace: true,
+            search: (prev) => ({ ...prev, token: "" }),
+        });
+    }, [verify.data, navigate]);
+
+    useEffect(() => {
+        if (!verify.isError) return;
+        navigate({
+            replace: true,
+            search: (prev) => ({ ...prev, token: "" }),
+        });
+    }, [verify.isError, navigate]);
 
     useEffect(() => {
         if (!accessToken) return;
@@ -110,6 +110,9 @@ function RouteComponent() {
         enabled: Boolean(accessToken),
         queryFn: async () => (await api.get("/users/getMe")).data,
     });
+
+    if (!accessToken && verify.isLoading) return <div>Tekshirilmoqda...</div>;
+    if (!accessToken && verify.isError) return <div>Token yaroqsiz.</div>;
 
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
