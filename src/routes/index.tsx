@@ -4,9 +4,9 @@ import { CreditCardsCarousel } from "@/components/credit-cards";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api/base";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -65,37 +65,56 @@ const cards: CreditCardDTO[] = [
 
 function RouteComponent() {
     const { token } = Route.useSearch();
+    const navigate = Route.useNavigate();
 
-    const { data } = useQuery({
-        queryKey: ["tg-verify", token],
-        enabled: Boolean(token),
-        queryFn: async () => {
-            const response = await api.get(`/users/getToken/${token}`);
-            console.log("verify response", response);
+    const [accessToken, setAccessToken] = useState<string>(() => localStorage.getItem("accessToken") ?? "");
+
+    const exchangeToken = useMutation({
+        mutationFn: async (t: string) => {
+            const response = await api.get(`/users/getToken/${t}`);
             return response.data;
+        },
+        onSuccess: (data) => {
+            const at = data?.data?.accessToken as string | undefined;
+            if (!at) return;
+
+            localStorage.setItem("accessToken", at);
+            setAccessToken(at);
+
+            navigate({
+                replace: true,
+                search: (prev) => ({ ...prev, token: "" }),
+            });
+        },
+        onError: () => {
+            navigate({
+                replace: true,
+                search: (prev) => ({ ...prev, token: "" }),
+            });
         },
     });
 
-    const accessToken: string | undefined = data?.data?.accessToken;
+    useEffect(() => {
+        if (token && !accessToken && exchangeToken.status === "idle") {
+            exchangeToken.mutate(token);
+        }
+    }, [token, accessToken, exchangeToken]);
+
     useEffect(() => {
         if (!accessToken) return;
-        localStorage.setItem("accessToken", accessToken);
+        api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     }, [accessToken]);
 
-    const telegramUser = useQuery({
-        queryKey: ["tg-user", accessToken],
+    const me = useQuery({
+        queryKey: ["tg-user"],
         enabled: Boolean(accessToken),
-        queryFn: async () => {
-            const response = await api.get("/users/getMe");
-            console.log("telegram user response", response);
-            return response.data;
-        },
+        queryFn: async () => (await api.get("/users/getMe")).data,
     });
 
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
             <div className="pt-12 pb-4">
-                <div>{telegramUser.data?.data?.fullName}</div>
+                <div>{me.data?.data?.fullName}</div>
             </div>
             <div className="mb-2">
                 <CreditCardsCarousel cards={cards} />
