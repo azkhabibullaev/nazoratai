@@ -68,14 +68,14 @@ function RouteComponent() {
         queryKey: ["tg-verify", token],
         enabled: Boolean(token),
         queryFn: async () => {
-            const response = await api.get(`/users/getMe/${token}`);
+            const response = await api.get(`/users/getToken/${token}`);
             return response.data;
         },
     });
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
             <div className="p-2">
-                <div className="text-xl font-medium">{data?.data?.fullName}</div>
+                <div className="text-xl font-medium">{data?.data?.accessToken}</div>
             </div>
             <div className="mb-2">
                 <CreditCardsCarousel cards={cards} />
