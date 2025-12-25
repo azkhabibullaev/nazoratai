@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -66,54 +66,32 @@ const cards: CreditCardDTO[] = [
 
 function RouteComponent() {
     const { token } = Route.useSearch();
-    const navigate = Route.useNavigate();
-
-    const storedAccessToken = useMemo(() => {
-        return localStorage.getItem("accessToken") ?? "";
-    }, []);
 
     const verify = useQuery({
         queryKey: ["tg-verify", token],
-        enabled: Boolean(token) && !storedAccessToken,
+        enabled: Boolean(token),
         queryFn: async () => {
-            const res = await api.get(`/users/getToken/${token}`);
-            return res.data;
+            const response = await api.get(`/users/getToken/${token}`);
+            return response.data;
         },
     });
 
-    const accessToken: string = verify.data?.data?.accessToken ?? storedAccessToken;
+    const accessToken: string = verify.data?.data?.accessToken;
 
     useEffect(() => {
         const at = verify.data?.data?.accessToken as string | undefined;
         if (!at) return;
         localStorage.setItem("accessToken", at);
-        navigate({
-            replace: true,
-            search: (prev) => ({ ...prev, token: "" }),
-        });
-    }, [verify.data, navigate]);
-
-    useEffect(() => {
-        if (!verify.isError) return;
-        navigate({
-            replace: true,
-            search: (prev) => ({ ...prev, token: "" }),
-        });
-    }, [verify.isError, navigate]);
-
-    useEffect(() => {
-        if (!accessToken) return;
-        api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-    }, [accessToken]);
+    }, [verify.data]);
 
     const me = useQuery({
         queryKey: ["tg-user"],
         enabled: Boolean(accessToken),
-        queryFn: async () => (await api.get("/users/getMe")).data,
+        queryFn: async () => {
+            const response = await api.get("/users/getMe");
+            return response.data;
+        },
     });
-
-    if (!accessToken && verify.isLoading) return <div>Tekshirilmoqda...</div>;
-    if (!accessToken && verify.isError) return <div>Token yaroqsiz.</div>;
 
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
