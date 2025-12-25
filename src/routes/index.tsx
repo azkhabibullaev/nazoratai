@@ -1,12 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { BottomNavigation } from "@/components/bottom-nav";
-import { CreditCardsCarousel } from "@/components/credit-cards";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
-import { AppDrawer } from "@/components/app-drawer/app-drawer";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/api/base";
 import { useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+
+import { api } from "@/api/base";
+
+import { Reports } from "@/components/reports/reports";
+import { BottomNavigation } from "@/components/bottom-nav";
+import { AppDrawer } from "@/components/app-drawer/app-drawer";
+import { CreditCardsCarousel } from "@/components/credit-cards";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -116,28 +117,13 @@ function RouteComponent() {
 
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
-            <div className="py-8">
+            <div className="py-4">
                 <div>{me.data?.data?.fullName}</div>
             </div>
             <div className="mb-2">
                 <CreditCardsCarousel cards={cards} />
             </div>
-            <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-green-500 bg-background">
-                    <HugeiconsIcon className="size-6" icon={ChartUpIcon} />
-                    <div className="flex flex-col text-center text-sm font-medium">
-                        <span>Xarajat</span>
-                        <span>+100,000</span>
-                    </div>
-                </div>
-                <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-red-500 bg-background">
-                    <HugeiconsIcon className="size-6" icon={ChartDownIcon} />
-                    <div className="flex flex-col text-sm font-medium">
-                        <span>Daromad</span>
-                        <span>-50,000</span>
-                    </div>
-                </div>
-            </div>
+            <Reports />
             <div className="flex items-center gap-2 text-sm">
                 <div className="flex-1 p-2 border rounded-xl text-center bg-background">Kunlik</div>
                 <div className="flex-1 p-2 border rounded-xl text-center bg-background">Haftalik</div>
