@@ -116,7 +116,7 @@ function RouteComponent() {
 
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
-            <div className="pt-12 pb-4">
+            <div className="py-8">
                 <div>{me.data?.data?.fullName}</div>
             </div>
             <div className="mb-2">
