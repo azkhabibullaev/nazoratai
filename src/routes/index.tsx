@@ -70,6 +70,7 @@ function RouteComponent() {
         enabled: Boolean(id),
         queryFn: async () => {
             const response = await axios.get(`/users/getToken/${id}`);
+            console.log("verify response", response);
             return response.data;
         },
     });
@@ -79,7 +80,8 @@ function RouteComponent() {
         queryKey: ["tg-user", accessToken],
         enabled: Boolean(accessToken),
         queryFn: async () => {
-            const response = await api.get(`/users/getMe`);
+            const response = await api.get("/users/getMe");
+            console.log("telegram user response", response);
             return response.data;
         },
     });
