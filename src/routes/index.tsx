@@ -65,8 +65,7 @@ const cards: CreditCardDTO[] = [
 function RouteComponent() {
     const { id } = Route.useSearch();
     const { data } = useQuery({
-        queryKey: ["tg-verify", id],
-        enabled: Boolean(id),
+        queryKey: ["tg-verify"],
         queryFn: async () => {
             const response = await api.get(`/users/getToken/${id}`);
             return response.data;
@@ -75,8 +74,7 @@ function RouteComponent() {
     const accessToken = data?.data?.accessToken;
     localStorage.setItem("accessToken", accessToken ?? "");
     const telegramUser = useQuery({
-        queryKey: ["tg-user", accessToken],
-        enabled: Boolean(accessToken),
+        queryKey: ["tg-user"],
         queryFn: async () => {
             const response = await api.get(`/users/getMe`);
             return response.data;
@@ -84,7 +82,7 @@ function RouteComponent() {
     });
     return (
         <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
-            <div>
+            <div className="py-4">
                 <div>{telegramUser.data?.data?.fullName}</div>
             </div>
             <div className="mb-2">
