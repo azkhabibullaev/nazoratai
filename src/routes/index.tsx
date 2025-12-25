@@ -11,7 +11,7 @@ import axios from "axios";
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
         return {
-            id: typeof search.token === "string" ? search.token : "",
+            token: typeof search.token === "string" ? search.token : "",
         };
     },
     component: RouteComponent,
@@ -64,12 +64,12 @@ const cards: CreditCardDTO[] = [
 ];
 
 function RouteComponent() {
-    const { id } = Route.useSearch();
+    const { token } = Route.useSearch();
     const { data } = useQuery({
-        queryKey: ["tg-verify", id],
-        enabled: Boolean(id),
+        queryKey: ["tg-verify", token],
+        enabled: Boolean(token),
         queryFn: async () => {
-            const response = await axios.get(`/users/getToken/${id}`);
+            const response = await axios.get(`/users/getToken/${token}`);
             console.log("verify response", response);
             return response.data;
         },
