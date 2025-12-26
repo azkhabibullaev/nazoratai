@@ -1,12 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { BottomNavigation } from "@/components/bottom-nav";
-import { CreditCardsCarousel } from "@/components/credit-cards";
-import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+
 import { api } from "@/api/base";
-import { Reports } from "@/components/reports/reports";
+
 import { Skeleton } from "@/components/ui/skeleton";
+import { Reports } from "@/components/reports/reports";
+import { BottomNavigation } from "@/components/bottom-nav";
+import { AppDrawer } from "@/components/app-drawer/app-drawer";
+import { CreditCardsCarousel } from "@/components/credit-cards";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -119,11 +121,6 @@ function RouteComponent() {
                     <CreditCardsCarousel cards={cards} />
                 </div>
                 <Reports />
-                <div className="flex items-center gap-2 text-sm">
-                    <div className="flex-1 p-2 border rounded-xl text-center bg-background">Kunlik</div>
-                    <div className="flex-1 p-2 border rounded-xl text-center bg-background">Haftalik</div>
-                    <div className="flex-1 p-2 border rounded-xl text-center bg-background">Oylik</div>
-                </div>
             </div>
             <BottomNavigation />
             <AppDrawer />

@@ -14,6 +14,7 @@ type Props = {
     onChange?: (tab: Tab) => void;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const items: Array<{ key: Exclude<Tab, "center">; label: string; icon: any }> = [
     { key: "home", label: "Asosiy", icon: HomeIcon },
     { key: "history", label: "Tarix", icon: Clock01Icon },
