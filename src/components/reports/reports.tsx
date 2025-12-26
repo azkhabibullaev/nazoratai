@@ -34,14 +34,14 @@ export function Reports() {
                     </>
                 ) : (
                     <>
-                        <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-red-500 bg-background">
+                        <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-red-400 bg-background">
                             <HugeiconsIcon className="size-6" icon={ChartDownIcon} />
                             <div className="flex flex-col text-sm font-medium">
                                 <span>Xarajat</span>
                                 <span>-{formatCurrency(data?.totalExpense ?? 0)}</span>
                             </div>
                         </div>
-                        <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-green-500 bg-background">
+                        <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-green-400 bg-background">
                             <HugeiconsIcon className="size-6" icon={ChartUpIcon} />
                             <div className="flex flex-col text-center text-sm font-medium">
                                 <span>Daromad</span>
