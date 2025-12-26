@@ -95,7 +95,6 @@ function RouteComponent() {
 
     const me = useQuery({
         queryKey: ["tg-user"],
-        enabled: Boolean(accessToken),
         queryFn: async () => {
             const response = await api.get("/users/getMe");
             return response.data;
