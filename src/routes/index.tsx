@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/base";
 import { Reports } from "@/components/reports/reports";
-import { Skeleton } from "@telegram-apps/telegram-ui";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
