@@ -82,11 +82,7 @@ export function ReportsChart({ reports }: ReportsChartProps) {
                                             textAnchor="middle"
                                             dominantBaseline="middle"
                                         >
-                                            <tspan
-                                                x={viewBox.cx}
-                                                y={viewBox.cy}
-                                                className="fill-foreground text-xl font-bold"
-                                            >
+                                            <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground font-bold">
                                                 {total.toLocaleString()}
                                             </tspan>
                                             <tspan
