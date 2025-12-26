@@ -67,19 +67,23 @@ function RouteComponent() {
 
     const verify = useQuery({
         queryKey: ["tg-verify", token],
+        enabled: Boolean(token),
         queryFn: async () => {
             const res = await api.get(`/users/getToken/${token}`);
             return res.data;
         },
     });
+
     const accessToken = verify.data?.data?.accessToken as string | undefined;
+
     useEffect(() => {
         if (!accessToken) return;
         localStorage.setItem("accessToken", accessToken);
-    }, []);
+    }, [accessToken]);
 
     const me = useQuery({
         queryKey: ["tg-user"],
+        enabled: Boolean(accessToken),
         queryFn: async () => {
             const response = await api.get("/users/getMe");
             return response.data;
