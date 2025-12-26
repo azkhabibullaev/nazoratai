@@ -22,7 +22,7 @@ export function Reports() {
         queryKey: ["reports", period],
         queryFn: async () => {
             const response = await api.get("/transaction/getReport", {
-                params: { period },
+                params: { reportDuration: period },
             });
             return response.data;
         },
