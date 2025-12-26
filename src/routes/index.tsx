@@ -66,12 +66,9 @@ function RouteComponent() {
     const { token } = Route.useSearch();
     const navigate = Route.useNavigate();
 
-    const existing = localStorage.getItem("accessToken");
-
     const verify = useQuery({
         queryKey: ["tg-verify", token],
-        enabled: Boolean(token) && !existing,
-        retry: false,
+        enabled: Boolean(token),
         queryFn: async () => {
             const res = await api.get(`/users/getToken/${token}`);
             return res.data;
@@ -83,6 +80,7 @@ function RouteComponent() {
     useEffect(() => {
         if (!accessToken) return;
         localStorage.setItem("accessToken", accessToken);
+        api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     }, [accessToken]);
 
     useEffect(() => {
