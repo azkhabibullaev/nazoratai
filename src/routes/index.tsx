@@ -1,13 +1,11 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { BottomNavigation } from "@/components/bottom-nav";
+import { CreditCardsCarousel } from "@/components/credit-cards";
+import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
-
 import { api } from "@/api/base";
-
 import { Reports } from "@/components/reports/reports";
-import { BottomNavigation } from "@/components/bottom-nav";
-import { AppDrawer } from "@/components/app-drawer/app-drawer";
-import { CreditCardsCarousel } from "@/components/credit-cards";
 
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
@@ -69,24 +67,19 @@ function RouteComponent() {
 
     const verify = useQuery({
         queryKey: ["tg-verify", token],
-        enabled: Boolean(token),
         queryFn: async () => {
-            const response = await api.get(`/users/getToken/${token}`);
-            return response.data;
+            const res = await api.get(`/users/getToken/${token}`);
+            return res.data;
         },
     });
-
-    const accessToken: string = verify.data?.data?.accessToken;
-
+    const accessToken = verify.data?.data?.accessToken as string | undefined;
     useEffect(() => {
-        const at = verify.data?.data?.accessToken as string | undefined;
-        if (!at) return;
-        localStorage.setItem("accessToken", at);
-    }, [verify.data]);
+        if (!accessToken) return;
+        localStorage.setItem("accessToken", accessToken);
+    }, [accessToken]);
 
     const me = useQuery({
         queryKey: ["tg-user"],
-        enabled: Boolean(accessToken),
         queryFn: async () => {
             const response = await api.get("/users/getMe");
             return response.data;
@@ -94,18 +87,22 @@ function RouteComponent() {
     });
 
     return (
-        <div className="relative h-dvh max-w-xl mx-auto px-4 bg-[#f5f6f7]">
-            <div className="py-4">
-                <div>{me.data?.data?.fullName}</div>
-            </div>
-            <div className="mb-2">
-                <CreditCardsCarousel cards={cards} />
-            </div>
-            <Reports />
-            <div className="flex items-center gap-2 text-sm">
-                <div className="flex-1 p-2 border rounded-xl text-center bg-background">Kunlik</div>
-                <div className="flex-1 p-2 border rounded-xl text-center bg-background">Haftalik</div>
-                <div className="flex-1 p-2 border rounded-xl text-center bg-background">Oylik</div>
+        <div className="h-dvh">
+            <header className="fixed top-0 left-0 z-50 w-full py-4 bg-background border-b">
+                <div className="relative z-50 flex items-center justify-between max-w-xl mx-auto px-4">
+                    Salom, {me.data?.data?.fullName ? me.data?.data?.fullName : "Test"}
+                </div>
+            </header>
+            <div className="relative min-h-screen max-w-xl mx-auto px-4 mt-16">
+                <div className="mb-2">
+                    <CreditCardsCarousel cards={cards} />
+                </div>
+                <Reports />
+                <div className="flex items-center gap-2 text-sm">
+                    <div className="flex-1 p-2 border rounded-xl text-center bg-background">Kunlik</div>
+                    <div className="flex-1 p-2 border rounded-xl text-center bg-background">Haftalik</div>
+                    <div className="flex-1 p-2 border rounded-xl text-center bg-background">Oylik</div>
+                </div>
             </div>
             <BottomNavigation />
             <AppDrawer />
