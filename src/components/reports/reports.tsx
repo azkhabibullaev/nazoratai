@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons";
 import { api } from "@/api/base";
 import { formatCurrency } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function Reports() {
     const reports = useQuery({
@@ -15,20 +16,29 @@ export function Reports() {
 
     return (
         <div className="flex items-center justify-between gap-2 mb-2">
-            <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-green-500 bg-background">
-                <HugeiconsIcon className="size-6" icon={ChartUpIcon} />
-                <div className="flex flex-col text-center text-sm font-medium">
-                    <span>Daromad</span>
-                    <span>+{formatCurrency(reports.data?.totalIncome)}</span>
-                </div>
-            </div>
-            <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-red-500 bg-background">
-                <HugeiconsIcon className="size-6" icon={ChartDownIcon} />
-                <div className="flex flex-col text-sm font-medium">
-                    <span>Xarajat</span>
-                    <span>-{formatCurrency(reports.data?.totalExpense)}</span>
-                </div>
-            </div>
+            {reports.isLoading ? (
+                <>
+                    <Skeleton className="flex-1 border h-[58px] w-[250px] rounded-xl" />
+                    <Skeleton className="flex-1 border h-[58px] w-[250px] rounded-xl" />
+                </>
+            ) : (
+                <>
+                    <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-green-500 bg-background">
+                        <HugeiconsIcon className="size-6" icon={ChartUpIcon} />
+                        <div className="flex flex-col text-center text-sm font-medium">
+                            <span>Daromad</span>
+                            <span>+{formatCurrency(reports.data?.totalIncome)}</span>
+                        </div>
+                    </div>
+                    <div className="flex-1 flex items-center justify-center gap-4 border rounded-xl p-2 text-red-500 bg-background">
+                        <HugeiconsIcon className="size-6" icon={ChartDownIcon} />
+                        <div className="flex flex-col text-sm font-medium">
+                            <span>Xarajat</span>
+                            <span>-{formatCurrency(reports.data?.totalExpense)}</span>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 }
