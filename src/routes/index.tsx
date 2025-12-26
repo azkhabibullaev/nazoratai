@@ -10,7 +10,7 @@ import { Reports } from "@/components/reports/reports";
 export const Route = createFileRoute("/")({
     validateSearch: (search: Record<string, unknown>) => {
         return {
-            token: typeof search.token === "string" ? search.token : "",
+            token: typeof search.token === "string" ? search.token : undefined,
         };
     },
     component: RouteComponent,
@@ -64,10 +64,14 @@ const cards: CreditCardDTO[] = [
 
 function RouteComponent() {
     const { token } = Route.useSearch();
+    const navigate = Route.useNavigate();
+
+    const existing = localStorage.getItem("accessToken");
 
     const verify = useQuery({
         queryKey: ["tg-verify", token],
-        enabled: Boolean(token),
+        enabled: Boolean(token) && !existing,
+        retry: false,
         queryFn: async () => {
             const res = await api.get(`/users/getToken/${token}`);
             return res.data;
@@ -80,6 +84,16 @@ function RouteComponent() {
         if (!accessToken) return;
         localStorage.setItem("accessToken", accessToken);
     }, [accessToken]);
+
+    useEffect(() => {
+        if (!verify.isSuccess) return;
+        if (!token) return;
+        navigate({
+            to: "/",
+            search: (prev) => ({ ...prev, token: "" }),
+            replace: true,
+        });
+    }, [verify.isSuccess, token, navigate]);
 
     const me = useQuery({
         queryKey: ["tg-user"],
