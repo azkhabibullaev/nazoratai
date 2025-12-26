@@ -16,7 +16,7 @@ export function Reports() {
 
     return (
         <div className="flex items-center justify-between gap-2 mb-2">
-            {reports.isLoading ? (
+            {reports.isPending ? (
                 <>
                     <Skeleton className="flex-1 border h-[58px] w-[250px] rounded-xl" />
                     <Skeleton className="flex-1 border h-[58px] w-[250px] rounded-xl" />
