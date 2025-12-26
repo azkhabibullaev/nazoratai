@@ -66,35 +66,40 @@ function RouteComponent() {
     const { token } = Route.useSearch();
     const navigate = Route.useNavigate();
 
+    const storedAccessToken = localStorage.getItem("accessToken");
+
     const verify = useQuery({
         queryKey: ["tg-verify", token],
-        enabled: Boolean(token),
+        enabled: Boolean(token) && !storedAccessToken,
         queryFn: async () => {
             const res = await api.get(`/users/getToken/${token}`);
             return res.data;
         },
     });
 
-    const accessToken = verify.data?.data?.accessToken as string | undefined;
+    const freshAccessToken = verify.data?.data?.accessToken as string | undefined;
+    const accessToken = freshAccessToken ?? storedAccessToken ?? undefined;
 
     useEffect(() => {
-        if (!accessToken) return;
-        localStorage.setItem("accessToken", accessToken);
-        api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-    }, [accessToken]);
+        if (!freshAccessToken) return;
 
-    useEffect(() => {
-        if (!verify.isSuccess) return;
-        if (!token) return;
+        localStorage.setItem("accessToken", freshAccessToken);
+        api.defaults.headers.common.Authorization = `Bearer ${freshAccessToken}`;
+
         navigate({
             to: "/",
-            search: (prev) => ({ ...prev, token: "" }),
             replace: true,
+            search: (prev) => ({
+                ...prev,
+                token: undefined,
+            }),
         });
-    }, [verify.isSuccess, token, navigate]);
+    }, [freshAccessToken, navigate]);
 
     const me = useQuery({
         queryKey: ["tg-user"],
+        enabled: Boolean(accessToken),
+        refetchOnMount: "always",
         queryFn: async () => {
             const response = await api.get("/users/getMe");
             return response.data;
