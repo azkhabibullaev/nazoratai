@@ -50,7 +50,7 @@ export function Reports() {
                     <TabsTrigger value="month">Oylik</TabsTrigger>
                 </TabsList>
             </Tabs>
-            <ReportsChart />
+            <ReportsChart reports={reports.data} />
         </div>
     );
 }

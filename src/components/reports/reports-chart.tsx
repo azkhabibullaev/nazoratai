@@ -5,46 +5,57 @@ import { Label, Pie, PieChart } from "recharts";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
-export const description = "A donut chart with text";
+export type Category = {
+    categoryName: string;
+    totalAmount: number;
+};
 
-const chartData = [
-    { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-    { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "other", visitors: 190, fill: "var(--color-other)" },
-];
+export type Reports = {
+    totalIncome: number;
+    totalExpense: number;
+    incomeCategories: Category[];
+    expenseCategories: Category[];
+};
 
-const chartConfig = {
-    visitors: {
-        label: "Visitors",
-    },
-    chrome: {
-        label: "Chrome",
-        color: "var(--chart-1)",
-    },
-    safari: {
-        label: "Safari",
-        color: "var(--chart-2)",
-    },
-    firefox: {
-        label: "Firefox",
-        color: "var(--chart-3)",
-    },
-    edge: {
-        label: "Edge",
-        color: "var(--chart-4)",
-    },
-    other: {
-        label: "Other",
-        color: "var(--chart-5)",
-    },
-} satisfies ChartConfig;
+export type ReportsChartProps = {
+    reports: Reports;
+};
 
-export function ReportsChart() {
-    const totalVisitors = React.useMemo(() => {
-        return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-    }, []);
+type PieDatum = {
+    key: string;
+    name: string;
+    value: number;
+    fill: string;
+};
+
+const pickColorVar = (i: number) => `var(--chart-${(i % 5) + 1})`;
+
+function toPieData(categories: Category[]): PieDatum[] {
+    return categories
+        .filter((c) => Number(c.totalAmount) > 0)
+        .map((c, i) => ({
+            key: `cat_${i}`,
+            name: c.categoryName,
+            value: Number(c.totalAmount),
+            fill: pickColorVar(i),
+        }));
+}
+
+function buildConfig(data: PieDatum[]): ChartConfig {
+    return data.reduce((acc, d) => {
+        acc[d.key] = { label: d.name, color: d.fill };
+        return acc;
+    }, {} as ChartConfig);
+}
+
+export function ReportsChart({ reports }: ReportsChartProps) {
+    const [tab, setTab] = React.useState<"expense" | "income">("expense");
+
+    const pieData = React.useMemo(() => {
+        return tab === "expense" ? toPieData(reports.expenseCategories) : toPieData(reports.incomeCategories);
+    }, [tab, reports.expenseCategories, reports.incomeCategories]);
+    const chartConfig = React.useMemo(() => buildConfig(pieData), [pieData]);
+    const total = React.useMemo(() => pieData.reduce((sum, d) => sum + d.value, 0), [pieData]);
 
     return (
         <Card className="flex flex-col">
@@ -52,42 +63,42 @@ export function ReportsChart() {
                 <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
                     <PieChart>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        <Pie data={chartData} dataKey="visitors" nameKey="browser" innerRadius={60} strokeWidth={5}>
+                        <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
                             <Label
                                 content={({ viewBox }) => {
-                                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                                        return (
-                                            <text
+                                    if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox)) return null;
+                                    return (
+                                        <text
+                                            x={viewBox.cx}
+                                            y={viewBox.cy}
+                                            textAnchor="middle"
+                                            dominantBaseline="middle"
+                                        >
+                                            <tspan
                                                 x={viewBox.cx}
                                                 y={viewBox.cy}
-                                                textAnchor="middle"
-                                                dominantBaseline="middle"
+                                                className="fill-foreground text-3xl font-bold"
                                             >
-                                                <tspan
-                                                    x={viewBox.cx}
-                                                    y={viewBox.cy}
-                                                    className="fill-foreground text-3xl font-bold"
-                                                >
-                                                    {totalVisitors.toLocaleString()}
-                                                </tspan>
-                                                <tspan
-                                                    x={viewBox.cx}
-                                                    y={(viewBox.cy || 0) + 24}
-                                                    className="fill-muted-foreground"
-                                                >
-                                                    Visitors
-                                                </tspan>
-                                            </text>
-                                        );
-                                    }
+                                                {total.toLocaleString()}
+                                            </tspan>
+                                            <tspan
+                                                x={viewBox.cx}
+                                                y={(viewBox.cy || 0) + 24}
+                                                className="fill-muted-foreground"
+                                            >
+                                                {tab === "expense" ? "Chiqim" : "Kirim"}
+                                            </tspan>
+                                        </text>
+                                    );
                                 }}
                             />
                         </Pie>
+                        {pieData.length === 0 ? null : null}
                     </PieChart>
                 </ChartContainer>
             </CardContent>
             <CardFooter className="flex-col gap-2 text-sm">
-                <Tabs defaultValue="expanse" className="w-full my-2">
+                <Tabs value={tab} onValueChange={(v) => setTab(v as "expense" | "income")} className="w-full my-2">
                     <TabsList className="w-full">
                         <TabsTrigger value="expanse">Chiqim</TabsTrigger>
                         <TabsTrigger value="income">Kirim</TabsTrigger>
