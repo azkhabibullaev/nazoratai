@@ -62,14 +62,16 @@ export function ReportsChart({ reports }: ReportsChartProps) {
     const pieData = React.useMemo(() => {
         return tab === "expense" ? toPieData(safeReports.expenseCategories) : toPieData(safeReports.incomeCategories);
     }, [tab, safeReports.expenseCategories, safeReports.incomeCategories]);
+
     const chartConfig = React.useMemo(() => buildConfig(pieData), [pieData]);
+
     const total = React.useMemo(() => pieData.reduce((sum, d) => sum + d.value, 0), [pieData]);
 
     return (
         <Card className="flex flex-col">
             <CardContent className="flex-1 pb-0">
                 <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-                    <PieChart>
+                    <PieChart key={tab}>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                         <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
                             <Label
@@ -104,7 +106,7 @@ export function ReportsChart({ reports }: ReportsChartProps) {
             <CardFooter className="flex-col gap-2 text-sm">
                 <Tabs value={tab} onValueChange={(v) => setTab(v as "expense" | "income")} className="w-full my-2">
                     <TabsList className="w-full">
-                        <TabsTrigger value="expanse">Chiqim</TabsTrigger>
+                        <TabsTrigger value="expense">Chiqim</TabsTrigger>
                         <TabsTrigger value="income">Kirim</TabsTrigger>
                     </TabsList>
                 </Tabs>
