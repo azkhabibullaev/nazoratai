@@ -116,7 +116,7 @@ function RouteComponent() {
                     {me.isPending ? <Skeleton className="h-6 w-[250px]" /> : <>Salom, {me.data?.data?.fullName}</>}
                 </div>
             </header>
-            <div className="relative min-h-screen max-w-xl mx-auto px-4 mt-16">
+            <div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-16">
                 <div className="mb-2">
                     <CreditCardsCarousel cards={cards} />
                 </div>
