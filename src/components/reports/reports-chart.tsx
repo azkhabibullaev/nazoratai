@@ -18,7 +18,8 @@ export type Reports = {
 };
 
 export type ReportsChartProps = {
-    reports: Reports;
+    reports?: Reports;
+    loading?: boolean;
 };
 
 type PieDatum = {
@@ -51,9 +52,16 @@ function buildConfig(data: PieDatum[]): ChartConfig {
 export function ReportsChart({ reports }: ReportsChartProps) {
     const [tab, setTab] = React.useState<"expense" | "income">("expense");
 
+    const safeReports: Reports = reports ?? {
+        totalIncome: 0,
+        totalExpense: 0,
+        incomeCategories: [],
+        expenseCategories: [],
+    };
+
     const pieData = React.useMemo(() => {
-        return tab === "expense" ? toPieData(reports.expenseCategories) : toPieData(reports.incomeCategories);
-    }, [tab, reports.expenseCategories, reports.incomeCategories]);
+        return tab === "expense" ? toPieData(safeReports.expenseCategories) : toPieData(safeReports.incomeCategories);
+    }, [tab, safeReports.expenseCategories, safeReports.incomeCategories]);
     const chartConfig = React.useMemo(() => buildConfig(pieData), [pieData]);
     const total = React.useMemo(() => pieData.reduce((sum, d) => sum + d.value, 0), [pieData]);
 
