@@ -110,13 +110,13 @@ function RouteComponent() {
     return (
         <div className="h-dvh">
             <header className="fixed top-0 left-0 z-50 w-full py-4 bg-background border-b">
-                {me.isLoading ? (
-                    <Skeleton className="h-4 w-[250px]" />
-                ) : (
-                    <div className="relative z-50 flex items-center justify-between max-w-xl mx-auto px-4">
-                        Salom, {me.data?.data?.fullName ? me.data?.data?.fullName : "Test"}
-                    </div>
-                )}
+                <div className="relative z-50 flex items-center justify-between max-w-xl mx-auto px-4">
+                    {me.isLoading ? (
+                        <Skeleton className="h-4 w-[250px] bg-amber-500" />
+                    ) : (
+                        <>Salom, {me.data?.data?.fullName}</>
+                    )}
+                </div>
             </header>
             <div className="relative min-h-screen max-w-xl mx-auto px-4 mt-16">
                 <div className="mb-2">
