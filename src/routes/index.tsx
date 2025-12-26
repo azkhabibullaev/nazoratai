@@ -70,7 +70,7 @@ function RouteComponent() {
 
     const verify = useQuery({
         queryKey: ["tg-verify", token],
-        enabled: Boolean(token) && !storedAccessToken,
+        enabled: Boolean(token),
         queryFn: async () => {
             const res = await api.get(`/users/getToken/${token}`);
             return res.data;
