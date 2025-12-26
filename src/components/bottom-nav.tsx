@@ -34,59 +34,53 @@ export function BottomNavigation({ value, defaultValue = "home", onChange }: Pro
     };
 
     return (
-        <div className="fixed inset-x-0 bottom-0 z-50 pb-[calc(env(safe-area-inset-bottom)+12px)]">
-            <div className="mx-auto w-full max-w-xl px-4">
-                <div className="relative">
-                    <nav className="mx-auto h-20 w-full max-w-xl rounded-3xl border bg-background/95 backdrop-blur shadow-[0_12px_30px_-18px_rgba(0,0,0,0.35)]">
-                        <ul className="grid h-full grid-cols-5 items-center px-2">
-                            {items.slice(0, 2).map(({ key, label, icon }) => {
-                                const isActive = active === key;
-                                return (
-                                    <li key={key}>
-                                        <a
-                                            href="#"
-                                            onClick={() => setActive(key)}
-                                            className={cn(
-                                                "flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors",
-                                                isActive
-                                                    ? "text-primary"
-                                                    : "text-muted-foreground hover:text-foreground",
-                                            )}
-                                        >
-                                            <HugeiconsIcon icon={icon} size={20} />
-                                            <span className="text-[12px] leading-none">{label}</span>
-                                        </a>
-                                    </li>
-                                );
-                            })}
-                            <div />
-                            {items.slice(2).map(({ key, label, icon }) => {
-                                const isActive = active === key;
-                                return (
-                                    <li key={key}>
-                                        <a
-                                            href="#"
-                                            onClick={() => setActive(key)}
-                                            className={cn(
-                                                "flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors",
-                                                isActive
-                                                    ? "text-primary"
-                                                    : "text-muted-foreground hover:text-foreground",
-                                            )}
-                                        >
-                                            <HugeiconsIcon icon={icon} size={20} />
-                                            <span className="text-[12px] leading-none">{label}</span>
-                                        </a>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </nav>
-                    <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1">
-                        <Button size="icon" type="button" onClick={open} className="h-16 w-16 rounded-full">
-                            <HugeiconsIcon icon={PlusSignIcon} className="size-6" />
-                        </Button>
-                    </div>
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t">
+            <div className="relative">
+                <nav className="h-16">
+                    <ul className="grid h-full grid-cols-5 items-center px-2">
+                        {items.slice(0, 2).map(({ key, label, icon }) => {
+                            const isActive = active === key;
+                            return (
+                                <li key={key}>
+                                    <a
+                                        href="#"
+                                        onClick={() => setActive(key)}
+                                        className={cn(
+                                            "flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors",
+                                            isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                                        )}
+                                    >
+                                        <HugeiconsIcon icon={icon} size={20} />
+                                        <span className="text-[12px] leading-none">{label}</span>
+                                    </a>
+                                </li>
+                            );
+                        })}
+                        <div />
+                        {items.slice(2).map(({ key, label, icon }) => {
+                            const isActive = active === key;
+                            return (
+                                <li key={key}>
+                                    <a
+                                        href="#"
+                                        onClick={() => setActive(key)}
+                                        className={cn(
+                                            "flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors",
+                                            isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                                        )}
+                                    >
+                                        <HugeiconsIcon icon={icon} size={20} />
+                                        <span className="text-[12px] leading-none">{label}</span>
+                                    </a>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </nav>
+                <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-3">
+                    <Button size="icon" type="button" onClick={open} className="h-16 w-16 rounded-full">
+                        <HugeiconsIcon icon={PlusSignIcon} className="size-6" />
+                    </Button>
                 </div>
             </div>
         </div>
