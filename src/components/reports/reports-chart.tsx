@@ -85,7 +85,7 @@ export function ReportsChart({ reports }: ReportsChartProps) {
                                             <tspan
                                                 x={viewBox.cx}
                                                 y={viewBox.cy}
-                                                className="fill-foreground text-3xl font-bold"
+                                                className="fill-foreground text-xl font-bold"
                                             >
                                                 {total.toLocaleString()}
                                             </tspan>
