@@ -76,7 +76,7 @@ function RouteComponent() {
     useEffect(() => {
         if (!accessToken) return;
         localStorage.setItem("accessToken", accessToken);
-    }, [accessToken]);
+    }, []);
 
     const me = useQuery({
         queryKey: ["tg-user"],
