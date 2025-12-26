@@ -12,16 +12,21 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import { ReportsChart } from "./reports-chart";
 import { ReportsList } from "./reports-list";
+import type { TPeriod } from "./types";
 
 export function Reports() {
     const [tab, setTab] = React.useState<"expense" | "income">("expense");
+    const [period, setPeriod] = React.useState<TPeriod>("today");
 
     const { data, isPending } = useQuery({
-        queryKey: ["reports"],
+        queryKey: ["reports", period],
         queryFn: async () => {
-            const response = await api.get("/transaction/getReport");
+            const response = await api.get("/transaction/getReport", {
+                params: { period },
+            });
             return response.data;
         },
+        placeholderData: (prev) => prev,
     });
 
     return (
@@ -51,7 +56,7 @@ export function Reports() {
                     </>
                 )}
             </div>
-            <Tabs defaultValue="today" className="w-full mb-2">
+            <Tabs value={period} onValueChange={(v) => setPeriod(v as TPeriod)} className="w-full mb-2">
                 <TabsList className="w-full">
                     <TabsTrigger value="today">Kunlik</TabsTrigger>
                     <TabsTrigger value="week">Haftalik</TabsTrigger>

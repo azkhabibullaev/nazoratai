@@ -22,3 +22,5 @@ export type TPieDatum = {
     value: number;
     fill: string;
 };
+
+export type TPeriod = "today" | "week" | "month";
