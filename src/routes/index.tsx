@@ -149,7 +149,7 @@ function RouteComponent() {
                     </DropdownMenu>
                 </div>
             </header>
-            <div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-16">
+            <div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-20">
                 <div className="mb-2">
                     <CreditCardsCarousel cards={cards} />
                 </div>
