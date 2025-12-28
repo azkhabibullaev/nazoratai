@@ -23,6 +23,8 @@ function Layout() {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [accessToken, setAccessToken] = useState<string | undefined>();
 
+	console.log(loading, errorMessage, accessToken, navigate);
+
 	useEffect(() => {
 		const controller = new AbortController();
 		(async () => {
