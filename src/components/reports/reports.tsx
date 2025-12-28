@@ -16,7 +16,7 @@ export function Reports() {
 	const setPeriod = useReportsStore((s) => s.setPeriod);
 	const setTab = useReportsStore((s) => s.setTab);
 
-	const { data, isPending, isFetching } = useReportsQuery(period);
+	const { data, isPending } = useReportsQuery(period);
 
 	return (
 		<div>
