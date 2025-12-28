@@ -1,26 +1,26 @@
 export type TCategory = {
-    categoryName: string;
-    totalAmount: number;
+	categoryName: string;
+	totalAmount: number;
 };
 
 export type TReports = {
-    totalIncome: number;
-    totalExpense: number;
-    incomeCategories: TCategory[];
-    expenseCategories: TCategory[];
+	totalIncome: number;
+	totalExpense: number;
+	incomeCategories: TCategory[];
+	expenseCategories: TCategory[];
 };
 
 export type TReportsProps = {
-    tab?: "expense" | "income";
-    reports?: TReports;
-    loading?: boolean;
+	tab?: "expense" | "income";
+	reports?: TReports;
+	loading?: boolean;
 };
 
 export type TPieDatum = {
-    key: string;
-    name: string;
-    value: number;
-    fill: string;
+	key: string;
+	name: string;
+	value: number;
+	fill: string;
 };
 
 export type TPeriod = "today" | "week" | "month";

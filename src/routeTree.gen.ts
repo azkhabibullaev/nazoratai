@@ -8,52 +8,136 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as LayoutRouteImport } from "./routes/_layout";
+import { Route as LayoutIndexRouteImport } from "./routes/_layout/index";
+import { Route as LayoutHistoryRouteImport } from "./routes/_layout/history";
+import { Route as LayoutDebtsRouteImport } from "./routes/_layout/debts";
+import { Route as LayoutAccountRouteImport } from "./routes/_layout/account";
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const LayoutRoute = LayoutRouteImport.update({
+	id: "/_layout",
+	getParentRoute: () => rootRouteImport,
+} as any);
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
+	id: "/",
+	path: "/",
+	getParentRoute: () => LayoutRoute,
+} as any);
+const LayoutHistoryRoute = LayoutHistoryRouteImport.update({
+	id: "/history",
+	path: "/history",
+	getParentRoute: () => LayoutRoute,
+} as any);
+const LayoutDebtsRoute = LayoutDebtsRouteImport.update({
+	id: "/debts",
+	path: "/debts",
+	getParentRoute: () => LayoutRoute,
+} as any);
+const LayoutAccountRoute = LayoutAccountRouteImport.update({
+	id: "/account",
+	path: "/account",
+	getParentRoute: () => LayoutRoute,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+	"/account": typeof LayoutAccountRoute;
+	"/debts": typeof LayoutDebtsRoute;
+	"/history": typeof LayoutHistoryRoute;
+	"/": typeof LayoutIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+	"/account": typeof LayoutAccountRoute;
+	"/debts": typeof LayoutDebtsRoute;
+	"/history": typeof LayoutHistoryRoute;
+	"/": typeof LayoutIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+	__root__: typeof rootRouteImport;
+	"/_layout": typeof LayoutRouteWithChildren;
+	"/_layout/account": typeof LayoutAccountRoute;
+	"/_layout/debts": typeof LayoutDebtsRoute;
+	"/_layout/history": typeof LayoutHistoryRoute;
+	"/_layout/": typeof LayoutIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
-  fileRoutesById: FileRoutesById
+	fileRoutesByFullPath: FileRoutesByFullPath;
+	fullPaths: "/account" | "/debts" | "/history" | "/";
+	fileRoutesByTo: FileRoutesByTo;
+	to: "/account" | "/debts" | "/history" | "/";
+	id:
+		| "__root__"
+		| "/_layout"
+		| "/_layout/account"
+		| "/_layout/debts"
+		| "/_layout/history"
+		| "/_layout/";
+	fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+	LayoutRoute: typeof LayoutRouteWithChildren;
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
+declare module "@tanstack/react-router" {
+	interface FileRoutesByPath {
+		"/_layout": {
+			id: "/_layout";
+			path: "";
+			fullPath: "";
+			preLoaderRoute: typeof LayoutRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/_layout/": {
+			id: "/_layout/";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof LayoutIndexRouteImport;
+			parentRoute: typeof LayoutRoute;
+		};
+		"/_layout/history": {
+			id: "/_layout/history";
+			path: "/history";
+			fullPath: "/history";
+			preLoaderRoute: typeof LayoutHistoryRouteImport;
+			parentRoute: typeof LayoutRoute;
+		};
+		"/_layout/debts": {
+			id: "/_layout/debts";
+			path: "/debts";
+			fullPath: "/debts";
+			preLoaderRoute: typeof LayoutDebtsRouteImport;
+			parentRoute: typeof LayoutRoute;
+		};
+		"/_layout/account": {
+			id: "/_layout/account";
+			path: "/account";
+			fullPath: "/account";
+			preLoaderRoute: typeof LayoutAccountRouteImport;
+			parentRoute: typeof LayoutRoute;
+		};
+	}
 }
+
+interface LayoutRouteChildren {
+	LayoutAccountRoute: typeof LayoutAccountRoute;
+	LayoutDebtsRoute: typeof LayoutDebtsRoute;
+	LayoutHistoryRoute: typeof LayoutHistoryRoute;
+	LayoutIndexRoute: typeof LayoutIndexRoute;
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+	LayoutAccountRoute: LayoutAccountRoute,
+	LayoutDebtsRoute: LayoutDebtsRoute,
+	LayoutHistoryRoute: LayoutHistoryRoute,
+	LayoutIndexRoute: LayoutIndexRoute,
+};
+
+const LayoutRouteWithChildren =
+	LayoutRoute._addFileChildren(LayoutRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-}
+	LayoutRoute: LayoutRouteWithChildren,
+};
 export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+	._addFileChildren(rootRouteChildren)
+	._addFileTypes<FileRouteTypes>();
