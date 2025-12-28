@@ -1,3 +1,9 @@
+import {
+	ArrowRight01Icon,
+	DocumentAttachmentIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+
 import { Button } from "@/shared/components/ui/button";
 import {
 	Drawer,
@@ -8,6 +14,14 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from "@/shared/components/ui/drawer";
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemDescription,
+	ItemMedia,
+	ItemTitle,
+} from "@/shared/components/ui/item";
 import { useDrawerStore } from "@/shared/stores/global";
 
 export function AppDrawer() {
@@ -16,19 +30,57 @@ export function AppDrawer() {
 
 	return (
 		<Drawer open={isOpen} onClose={close}>
-			<DrawerContent>
+			<DrawerContent className="lg:max-w-3xl lg:mx-auto">
 				<DrawerHeader>
-					<DrawerTitle>Are you absolutely sure?</DrawerTitle>
+					<DrawerTitle>Yangi ma'lumot qo'shish</DrawerTitle>
 					<DrawerDescription>
-						This action cannot be undone.
+						Bu yerda yangi karta va kirim chiqim qo'shish mumkin.
 					</DrawerDescription>
 				</DrawerHeader>
-				<DrawerFooter>
-					<Button>Submit</Button>
-					<DrawerClose asChild>
-						<Button variant="outline">Cancel</Button>
-					</DrawerClose>
-				</DrawerFooter>
+				<div className="flex w-full flex-col gap-4 lg:max-w-3xl lg:mx-auto">
+					<Item variant="outline">
+						<ItemMedia variant="icon">
+							<HugeiconsIcon icon={DocumentAttachmentIcon} />
+						</ItemMedia>
+						<ItemContent>
+							<ItemTitle>Tranzaksiya qo'shish</ItemTitle>
+							<ItemDescription>
+								Xarajat, Daromad, Transfer.
+							</ItemDescription>
+						</ItemContent>
+						<ItemActions>
+							<HugeiconsIcon icon={ArrowRight01Icon} />
+						</ItemActions>
+					</Item>
+					<Item variant="outline">
+						<ItemMedia variant="icon">
+							<HugeiconsIcon icon={DocumentAttachmentIcon} />
+						</ItemMedia>
+						<ItemContent>
+							<ItemTitle>Tranzaksiya qo'shish</ItemTitle>
+							<ItemDescription>
+								Xarajat, Daromad, Transfer.
+							</ItemDescription>
+						</ItemContent>
+						<ItemActions>
+							<HugeiconsIcon icon={ArrowRight01Icon} />
+						</ItemActions>
+					</Item>
+					<Item variant="outline">
+						<ItemMedia variant="icon">
+							<HugeiconsIcon icon={DocumentAttachmentIcon} />
+						</ItemMedia>
+						<ItemContent>
+							<ItemTitle>Tranzaksiya qo'shish</ItemTitle>
+							<ItemDescription>
+								Xarajat, Daromad, Transfer.
+							</ItemDescription>
+						</ItemContent>
+						<ItemActions>
+							<HugeiconsIcon icon={ArrowRight01Icon} />
+						</ItemActions>
+					</Item>
+				</div>
 			</DrawerContent>
 		</Drawer>
 	);

@@ -1,5 +1,9 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
-import { useSessionStore } from "@/entities/session/model/session.store";
+import { useVerifyStore } from "@/entities/session/verify/verify.store";
+
+export const publicApi = axios.create({
+	baseURL: import.meta.env.VITE_API_URL,
+});
 
 export const api = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
@@ -7,7 +11,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		const token = useSessionStore.getState().accessToken;
+		const token = useVerifyStore.getState().accessToken;
 		if (token) config.headers.Authorization = `Bearer ${token}`;
 		return config;
 	},

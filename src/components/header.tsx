@@ -1,7 +1,7 @@
 import { Moon02Icon, Sun03Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
-import { useSessionStore } from "@/entities/session/model/session.store";
+import { useMeStore } from "@/entities/session/me/me.store";
 import { Button } from "@/shared/components/ui/button";
 import {
 	DropdownMenu,
@@ -13,7 +13,7 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export function Header() {
 	const { setTheme } = useTheme();
-	const me = useSessionStore((s) => s.me);
+	const me = useMeStore((s) => s.me);
 
 	return (
 		<header className="fixed top-0 left-0 z-50 w-full py-4 bg-background border-b">
