@@ -1,10 +1,10 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { BottomNavigation } from "@/components/bottom-nav";
 import { Header } from "@/components/header";
-import { useMeQuery } from "@/entities/session/me/me.query";
-import { useVerifyTgTokenQuery } from "@/entities/session/verify/verify.query";
+import { publicApi } from "@/shared/api/base";
 
 export const Route = createFileRoute("/_layout")({
 	validateSearch: (search: Record<string, unknown>) => {
@@ -19,22 +19,33 @@ function Layout() {
 	const { token } = Route.useSearch();
 	const navigate = Route.useNavigate();
 
-	const verify = useVerifyTgTokenQuery(token);
-	useMeQuery();
+	const [loading, setLoading] = useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const [accessToken, setAccessToken] = useState<string | undefined>();
 
 	useEffect(() => {
-		if (!token) return;
-		const ok = Boolean(verify.data?.accessToken);
-		if (!ok) return;
-		navigate({
-			to: "/",
-			replace: true,
-			search: (prev) => ({
-				...(prev as Record<string, unknown>),
-				token: undefined,
-			}),
-		});
-	}, [token, verify.data, navigate]);
+		const controller = new AbortController();
+		(async () => {
+			setLoading(true);
+			setErrorMessage(null);
+			try {
+				const res = await publicApi.get(`/users/getToken/${token}`, {
+					signal: controller.signal,
+				});
+				setAccessToken(res.data.accessToken);
+			} catch (e) {
+				if (controller.signal.aborted) return;
+				if (axios.isAxiosError(e)) {
+					setErrorMessage(e.response?.data?.message ?? e.message);
+				} else {
+					setErrorMessage("Noma'lum xatolik");
+				}
+			} finally {
+				setLoading(false);
+			}
+		})();
+		return () => controller.abort();
+	}, [token]);
 
 	return (
 		<div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-20">
