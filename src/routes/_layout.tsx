@@ -6,7 +6,6 @@ import { Header } from "@/components/header";
 import { useMeQuery } from "@/entities/session/api/me.query";
 import { useVerifyTgTokenQuery } from "@/entities/session/api/verify.query";
 import { useSessionStore } from "@/entities/session/model/session.store";
-import { api } from "@/shared/api/base";
 
 export const Route = createFileRoute("/_layout")({
 	validateSearch: (search: Record<string, unknown>) => {
