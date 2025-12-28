@@ -8,7 +8,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } f
 const pickColorVar = (i: number) => `var(--chart-${(i % 5) + 1})`;
 
 function toPieData(categories: TCategory[]): TPieDatum[] {
-    return categories
+    return (categories || [])
         .filter((c) => Number(c.totalAmount) > 0)
         .map((c, i) => ({
             key: `cat_${i}`,
