@@ -19,10 +19,13 @@ function Layout() {
 	const { token } = Route.useSearch();
 	const navigate = Route.useNavigate();
 
-	useVerifyTgTokenQuery(token);
+	const verify = useVerifyTgTokenQuery(token);
 	useMeQuery();
 
 	useEffect(() => {
+		if (!token) return;
+		const ok = Boolean(verify.data?.accessToken);
+		if (!ok) return;
 		navigate({
 			to: "/",
 			replace: true,
@@ -31,7 +34,7 @@ function Layout() {
 				token: undefined,
 			}),
 		});
-	}, [navigate]);
+	}, [token, verify.data, navigate]);
 
 	return (
 		<div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-20">

@@ -40,9 +40,9 @@ export function AppDrawer() {
 							<HugeiconsIcon icon={DocumentAttachmentIcon} />
 						</ItemMedia>
 						<ItemContent>
-							<ItemTitle>Tranzaksiya qo'shish</ItemTitle>
+							<ItemTitle>Yangi karta qo'shish</ItemTitle>
 							<ItemDescription>
-								Xarajat, Daromad, Transfer.
+								Bank kartasini qo'shing va balansni boshqaring.
 							</ItemDescription>
 						</ItemContent>
 						<ItemActions>
@@ -68,9 +68,10 @@ export function AppDrawer() {
 							<HugeiconsIcon icon={DocumentAttachmentIcon} />
 						</ItemMedia>
 						<ItemContent>
-							<ItemTitle>Tranzaksiya qo'shish</ItemTitle>
+							<ItemTitle>Qarz qo'shish</ItemTitle>
 							<ItemDescription>
-								Xarajat, Daromad, Transfer.
+								Berilgan yoki olingan qarzni qayd eting va
+								muddatini kuzating.
 							</ItemDescription>
 						</ItemContent>
 						<ItemActions>

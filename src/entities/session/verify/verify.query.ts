@@ -10,7 +10,7 @@ export function useVerifyTgTokenQuery(token?: string) {
 		queryFn: async () => {
 			const response = await publicApi.get(`/users/getToken/${token}`);
 			const data = response.data;
-			setAccessToken(data.accessToken);
+			if (data?.accessToken) setAccessToken(data.accessToken);
 			return data;
 		},
 	});

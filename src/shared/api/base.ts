@@ -1,4 +1,4 @@
-import axios, { type InternalAxiosRequestConfig } from "axios";
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { useVerifyStore } from "@/entities/session/verify/verify.store";
 
 export const publicApi = axios.create({
@@ -16,4 +16,17 @@ api.interceptors.request.use(
 		return config;
 	},
 	(error) => Promise.reject(error),
+);
+
+api.interceptors.response.use(
+	(res) => res,
+	(error: AxiosError) => {
+		const status = error.response?.status;
+		if (status === 401) {
+			const store = useVerifyStore.getState();
+			store.clear();
+			store.setNeedsReauth(true);
+		}
+		return Promise.reject(error);
+	},
 );
