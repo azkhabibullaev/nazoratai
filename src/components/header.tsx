@@ -20,7 +20,7 @@ export function Header() {
 			<div className="relative z-50 flex items-center justify-between max-w-xl mx-auto px-4">
 				<div>
 					{!me ? (
-						<Skeleton className="h-6 w-[250px]" />
+						<Skeleton className="h-6 w-62.5" />
 					) : (
 						<>Salom, {me.fullName}</>
 					)}

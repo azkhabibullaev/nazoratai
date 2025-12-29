@@ -1,4 +1,4 @@
-export type MeData = {
+export type MeResponse = {
 	chatId: number;
 	telegramId: number;
 	phone: string;
@@ -6,11 +6,7 @@ export type MeData = {
 	language: "UZ" | "RU" | "EN";
 };
 
-export type MeResponse = {
-	data: MeData;
-};
-
 export type MeState = {
-	me?: MeData;
+	me?: MeResponse;
 	setMe: (res?: MeResponse) => void;
 };

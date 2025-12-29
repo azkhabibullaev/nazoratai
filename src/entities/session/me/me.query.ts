@@ -13,7 +13,7 @@ export function useMeQuery() {
       const response = await api.get("/users/getMe");
       const data = response.data?.data;
       setMe(data);
-      return data;
+      return response.data;
     },
   });
 }
