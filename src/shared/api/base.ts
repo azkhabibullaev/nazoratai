@@ -1,4 +1,4 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 import { useVerifyStore } from "@/entities/session/verify/verify.store";
 
 export const publicApi = axios.create({
@@ -11,22 +11,9 @@ export const api = axios.create({
 
 api.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		const token = useVerifyStore.getState().accessToken;
-		if (token) config.headers.Authorization = `Bearer ${token}`;
+		const accessToken = useVerifyStore.getState().accessToken;
+		if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
 		return config;
 	},
 	(error) => Promise.reject(error),
-);
-
-api.interceptors.response.use(
-	(res) => res,
-	(error: AxiosError) => {
-		const status = error.response?.status;
-		if (status === 401) {
-			const store = useVerifyStore.getState();
-			store.clear();
-			store.setNeedsReauth(true);
-		}
-		return Promise.reject(error);
-	},
 );
