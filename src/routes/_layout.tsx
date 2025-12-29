@@ -28,9 +28,10 @@ function Layout() {
     async function verifyToken() {
       try {
         const response = await publicApi.get(`/users/getToken/${token}`);
-        const accessToken = response.data?.accessToken;
+        const accessToken = response.data?.data?.accessToken;
         if (isMounted) {
           console.log("Access Token:", accessToken);
+          setData(response.data?.data?.accessToken);
         }
       } catch (err: unknown) {
         if (!isMounted) return;
