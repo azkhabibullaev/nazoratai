@@ -39,8 +39,6 @@ function Layout() {
     <div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-20">
       <Header />
       <main>
-        <pre>{JSON.stringify(verify.data, null, 2)}</pre>
-        <pre>{JSON.stringify(userMe.data, null, 2)}</pre>
         <Outlet />
       </main>
       <BottomNavigation />
