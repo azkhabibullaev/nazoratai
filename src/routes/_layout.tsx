@@ -29,7 +29,7 @@ function Layout() {
       try {
         const response = await publicApi.get(`/users/getToken/${token}`);
         if (isMounted) {
-          setData(response.data);
+          setData(response.data.accessToken);
         }
       } catch (err: unknown) {
         if (!isMounted) return;
