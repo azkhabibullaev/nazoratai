@@ -4,6 +4,7 @@ import { BottomNavigation } from "@/components/bottom-nav";
 import { Header } from "@/components/header";
 import { useEffect, useState } from "react";
 import { publicApi } from "@/shared/api/base";
+import axios from "axios";
 
 export const Route = createFileRoute("/_layout")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -16,11 +17,11 @@ export const Route = createFileRoute("/_layout")({
 
 function Layout() {
   const { token } = Route.useSearch();
-  const navigate = Route.useNavigate();
+  //   const navigate = Route.useNavigate();
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | unknown>("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -30,9 +31,14 @@ function Layout() {
         if (isMounted) {
           setData(response.data);
         }
-      } catch (error) {
-        if (isMounted) {
-          setError(error);
+      } catch (err: unknown) {
+        if (!isMounted) return;
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data?.message ?? err.message);
+        } else if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Unknown error");
         }
       } finally {
         if (isMounted) {
@@ -49,7 +55,7 @@ function Layout() {
   }, [token]);
 
   if (loading) return <p>Loading data...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-20">
