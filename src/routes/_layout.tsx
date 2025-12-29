@@ -20,7 +20,7 @@ function Layout() {
   const navigate = Route.useNavigate();
 
   const verify = useVerifyTgTokenQuery(token);
-  const userMe = useMeQuery();
+  useMeQuery();
 
   useEffect(() => {
 	if (!token) return;
