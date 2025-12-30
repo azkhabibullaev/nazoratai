@@ -5,7 +5,6 @@ import { BottomNavigation } from "@/components/bottom-nav";
 import { Header } from "@/components/header";
 import { useMeQuery } from "@/entities/session/me/me.query";
 import { useVerifyTgTokenQuery } from "@/entities/session/verify/verify.query";
-import { useVerifyStore } from "@/entities/session/verify/verify.store";
 
 export const Route = createFileRoute("/_layout")({
 	validateSearch: (search: Record<string, unknown>) => {
