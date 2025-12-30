@@ -108,7 +108,7 @@ export function ReportsChart({ reports, tab, loading }: TReportsProps) {
 						dominantBaseline="middle"
 						className="fill-muted-foreground"
 					>
-						No data
+						Kirim chiqim mavjud emas
 					</text>
 				) : null}
 			</PieChart>
