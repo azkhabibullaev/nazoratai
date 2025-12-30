@@ -5,6 +5,7 @@ import { BottomNavigation } from "@/components/bottom-nav";
 import { Header } from "@/components/header";
 import { useMeQuery } from "@/entities/session/me/me.query";
 import { useVerifyTgTokenQuery } from "@/entities/session/verify/verify.query";
+import { useVerifyStore } from "@/entities/session/verify/verify.store";
 
 export const Route = createFileRoute("/_layout")({
 	validateSearch: (search: Record<string, unknown>) => {
@@ -20,7 +21,12 @@ function Layout() {
 	const navigate = Route.useNavigate();
 
 	const verify = useVerifyTgTokenQuery(token);
-	useMeQuery();
+	// const accessToken = useVerifyStore((s) => s.accessToken);
+	const accessToken =
+		typeof window !== "undefined"
+			? localStorage.getItem("accessToken")
+			: null;
+	useMeQuery(accessToken);
 
 	useEffect(() => {
 		if (!token) return;
