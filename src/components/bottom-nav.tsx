@@ -6,7 +6,8 @@ import {
 	UserIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
+import { cn } from "@/shared/lib/utils";
 import { useDrawerStore } from "@/shared/stores/global";
 import { Button } from "../shared/components/ui/button";
 
@@ -18,6 +19,7 @@ const items = [
 ];
 
 export function BottomNavigation() {
+	const location = useLocation();
 	const open = useDrawerStore((s) => s.open);
 	return (
 		<div className="fixed inset-x-0 bottom-0 z-50 border-t bg-background">
@@ -32,10 +34,12 @@ export function BottomNavigation() {
 										<Link
 											key={name}
 											to={path}
-											className="flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors"
-											activeProps={{
-												className: "text-primary",
-											}}
+											className={cn(
+												"flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors",
+												location.pathname === path
+													? ""
+													: "text-muted-foreground",
+											)}
 										>
 											<HugeiconsIcon
 												icon={icon}
@@ -55,10 +59,12 @@ export function BottomNavigation() {
 									<Link
 										key={name}
 										to={path}
-										className="flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors"
-										activeProps={{
-											className: "text-primary",
-										}}
+										className={cn(
+											"flex h-full flex-col items-center justify-center gap-1 rounded-2xl transition-colors",
+											location.pathname === path
+												? ""
+												: "text-muted-foreground",
+										)}
 									>
 										<HugeiconsIcon icon={icon} size={20} />
 										<span className="text-[12px] leading-none">

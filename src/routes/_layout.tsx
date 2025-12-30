@@ -1,6 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { UAParser } from "ua-parser-js";
 import { AppDrawer } from "@/components/app-drawer/app-drawer";
 import { BottomNavigation } from "@/components/bottom-nav";
 import { Header } from "@/components/header";
@@ -35,16 +34,6 @@ function Layout() {
 			}),
 		});
 	}, [token, verify.isSuccess, navigate]);
-
-	useEffect(() => {
-		const { browser, cpu, device } = UAParser(
-			"Mozilla/5.0 (X11; U; Linux armv7l; en-GB; rv:1.9.2a1pre) Gecko/20090928 Firefox/3.5 Maemo Browser 1.4.1.22 RX-51 N900",
-		);
-		console.log(browser.name);
-		console.log(cpu.is("arm"));
-		console.log(device.is("mobile"));
-		console.log(device.model);
-	}, []);
 
 	return (
 		<div className="relative min-h-screen max-w-xl mx-auto px-4 pb-32 mt-20">
